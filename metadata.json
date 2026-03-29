@@ -1,0 +1,5 @@
+{
+  "name": "MOCKIFY",
+  "description": "Real-time voice-to-voice AI interviews and domain-specific question explorer.",
+  "requestFramePermissions": ["microphone"]
+}

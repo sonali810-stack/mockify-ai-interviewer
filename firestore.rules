@@ -1,0 +1,122 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - uid: string (required) - The unique Firebase Auth ID.
+    //   - displayName: string (required, size < 100) - The user's full name.
+    //   - email: string (required, format: email) - The user's email address.
+    //   - skills: array (optional) - List of user skills.
+    //   - targetRole: string (optional) - The user's target job role.
+    //
+    // Collection: notes
+    // Document ID: {noteId}
+    // Fields:
+    //   - userId: string (required) - The owner's UID.
+    //   - text: string (required, size < 500) - The note content.
+    //   - completed: bool (required) - Completion status.
+    //
+    // Collection: interviews
+    // Document ID: {interviewId}
+    // Fields:
+    //   - userId: string (required) - The candidate's UID.
+    //   - score: number (required, 0-100) - Interview score.
+    //   - role: string (required) - The role interviewed for.
+    //   - type: string (required, 'voice' | 'chat') - The interview format.
+    //
+    // Collection: savedQuestions
+    // Document ID: {questionId}
+    // Fields:
+    //   - userId: string (required) - The user's UID.
+    //   - question: string (required) - The question text.
+    //   - category: string (optional) - Question category.
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "sonalirainy810@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidUser(data) {
+      return data.uid == request.auth.uid &&
+             data.displayName is string && data.displayName.size() > 0 && data.displayName.size() < 100 &&
+             data.email is string && isValidEmail(data.email);
+    }
+
+    function isValidNote(data) {
+      return data.userId == request.auth.uid &&
+             data.text is string && data.text.size() > 0 && data.text.size() < 500 &&
+             data.completed is bool;
+    }
+
+    function isValidInterview(data) {
+      return data.userId == request.auth.uid &&
+             data.score is number && data.score >= 0 && data.score <= 100 &&
+             data.role is string && data.role.size() > 0 &&
+             data.type in ['voice', 'chat'];
+    }
+
+    function isValidSavedQuestion(data) {
+      return data.userId == request.auth.uid &&
+             data.question is string && data.question.size() > 0;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data);
+    }
+
+    match /notes/{noteId} {
+      allow read: if isOwner(resource.data.userId);
+      allow create: if isAuthenticated() && isValidNote(request.resource.data);
+      allow update: if isOwner(resource.data.userId) && isValidNote(request.resource.data);
+      allow delete: if isOwner(resource.data.userId);
+    }
+
+    match /interviews/{interviewId} {
+      allow read: if isOwner(resource.data.userId) || isAdmin();
+      allow create: if isAuthenticated() && isValidInterview(request.resource.data);
+      allow update: if isOwner(resource.data.userId) && isValidInterview(request.resource.data);
+      allow delete: if isOwner(resource.data.userId) || isAdmin();
+    }
+
+    match /savedQuestions/{questionId} {
+      allow read: if isOwner(resource.data.userId);
+      allow create: if isAuthenticated() && isValidSavedQuestion(request.resource.data);
+      allow update: if isOwner(resource.data.userId) && isValidSavedQuestion(request.resource.data);
+      allow delete: if isOwner(resource.data.userId);
+    }
+
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update, delete: if isOwner(resource.data.userId) || isAdmin();
+    }
+  }
+}

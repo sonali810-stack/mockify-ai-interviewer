@@ -1,0 +1,90 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores professional profile information for a candidate.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "targetRole": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "email"]
+    },
+    "Interview": {
+      "title": "Interview History",
+      "description": "Stores records of past interview sessions.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "score": { "type": "number" },
+        "role": { "type": "string" },
+        "type": { "type": "string", "enum": ["voice", "chat"] }
+      },
+      "required": ["userId", "date", "score", "role", "type"]
+    },
+    "SavedQuestion": {
+      "title": "Saved Question",
+      "description": "Questions bookmarked by the user for later review.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "question": { "type": "string" },
+        "category": { "type": "string" }
+      },
+      "required": ["userId", "question"]
+    },
+    "Note": {
+      "title": "Note",
+      "description": "A to-do item or note for the candidate.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "text": { "type": "string" },
+        "completed": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "text", "completed"]
+    },
+    "Review": {
+      "title": "User Review",
+      "description": "Stores feedback and ratings from users about the platform.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "userName", "rating", "comment"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile documents."
+    },
+    "/interviews/{interviewId}": {
+      "schema": "Interview",
+      "description": "Historical interview records."
+    },
+    "/savedQuestions/{questionId}": {
+      "schema": "SavedQuestion",
+      "description": "User-bookmarked questions."
+    },
+    "/notes/{noteId}": {
+      "schema": "Note",
+      "description": "User to-do notes."
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Public user reviews."
+    }
+  }
+}

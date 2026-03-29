@@ -1,0 +1,92 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-primary: #D31235; /* Bold Red from image */
+  --color-primary-hover: #B00E2B;
+  --color-bg-light: #FFFFFF;
+  --color-bg-dark: #121212;
+  --color-surface-light: #F8F9FA;
+  --color-surface-dark: #1E1E1E;
+  --color-text-light: #1A1A1A;
+  --color-text-dark: #F5F5F5;
+}
+
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    @apply font-sans antialiased transition-colors duration-300;
+  }
+  
+  .dark body {
+    @apply bg-bg-dark text-text-dark;
+  }
+  
+  body:not(.dark) {
+    @apply bg-bg-light text-text-light;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/20 rounded-full hover:bg-primary/40 transition-colors;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-white/10 hover:bg-white/20;
+  }
+
+  /* Typography for Markdown */
+  .prose {
+    @apply text-slate-600 dark:text-slate-400 leading-relaxed;
+  }
+  .prose h1, .prose h2, .prose h3 {
+    @apply text-primary font-display font-bold tracking-tight mt-8 mb-4;
+  }
+  .prose h1 { @apply text-3xl; }
+  .prose h2 { @apply text-2xl; }
+  .prose h3 { @apply text-xl; }
+  .prose p { @apply mb-4; }
+  .prose ul, .prose ol { @apply mb-6 pl-6 space-y-2; }
+  .prose li { @apply list-disc; }
+  .prose strong { @apply text-slate-900 dark:text-white font-semibold; }
+  .prose code { @apply bg-primary/10 px-1.5 py-0.5 rounded text-primary font-mono text-sm; }
+  .prose blockquote { @apply border-l-4 border-primary/50 pl-6 italic text-slate-500 my-8; }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 bg-primary hover:bg-primary-hover text-white font-bold rounded-none transition-all uppercase tracking-wider text-sm;
+  }
+  
+  .btn-outline {
+    @apply px-6 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold rounded-none transition-all uppercase tracking-wider text-sm;
+  }
+
+  .card-luxury {
+    @apply bg-white dark:bg-surface-dark border border-slate-100 dark:border-white/5 p-8 transition-all hover:shadow-xl;
+  }
+
+  .red-accent {
+    @apply w-12 h-1 bg-primary mb-4;
+  }
+}
+
+.bg-mesh {
+  background-image: radial-gradient(at 0% 0%, rgba(211, 18, 53, 0.05) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(211, 18, 53, 0.05) 0px, transparent 50%);
+}
+
+.dark .bg-mesh {
+  background-image: radial-gradient(at 0% 0%, rgba(211, 18, 53, 0.1) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(211, 18, 53, 0.1) 0px, transparent 50%);
+}
