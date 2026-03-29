@@ -2,7 +2,12 @@ import { GoogleGenAI } from "@google/genai";
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
-export const ai = new GoogleGenAI({ apiKey: API_KEY });
+function getAIClient() {
+  if (!API_KEY) {
+    throw new Error("Missing VITE_GEMINI_API_KEY. Add it in Netlify environment variables and redeploy.");
+  }
+  return new GoogleGenAI({ apiKey: API_KEY });
+}
 
 export const DOMAINS = [
   "Software Engineering",
@@ -18,6 +23,7 @@ export const DOMAINS = [
 ];
 
 export async function getTopQuestions(domain: string) {
+  const ai = getAIClient();
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: `List the top 10 interview questions for the domain: ${domain}. 

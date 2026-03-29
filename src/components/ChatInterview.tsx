@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Search, ChevronRight, Loader2, MessageSquare, Send, ArrowLeft, Sparkles, User as UserIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Markdown from 'react-markdown';
-import { DOMAINS, getTopQuestions, ai } from '../services/gemini';
+import { DOMAINS, getTopQuestions } from '../services/gemini';
+import { GoogleGenAI } from '@google/genai';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -76,6 +77,12 @@ export default function ChatInterview() {
   const startChat = () => {
     setChatMode(true);
     const userName = user?.displayName?.split(' ')[0] || 'Candidate';
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (!apiKey) {
+      setMessages([{ role: 'model', text: 'Missing Gemini API key. Add VITE_GEMINI_API_KEY in Netlify environment variables and redeploy.' }]);
+      return;
+    }
+    const ai = new GoogleGenAI({ apiKey });
     const chat = ai.chats.create({
       model: "gemini-3-flash-preview",
       config: {
