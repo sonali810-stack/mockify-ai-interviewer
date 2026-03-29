@@ -129,14 +129,14 @@ export default function ChatInterview() {
             >
               <div className={`flex gap-3 md:gap-5 max-w-[90%] md:max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                 <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg ${
-                  msg.role === 'user' ? 'bg-red-600 text-white' : 'bg-gray-100 dark:bg-[#111111] text-red-600 border border-gray-200 dark:border-red-900/20'
+                  msg.role === 'user' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-[#111111] text-primary border border-gray-200 dark:border-primary/20'
                 }`}>
                   {msg.role === 'user' ? <UserIcon className="w-5 h-5 md:w-6 md:h-6" /> : <Sparkles className="w-5 h-5 md:w-6 md:h-6" />}
                 </div>
                 <div className={`p-5 md:p-8 rounded-2xl md:rounded-[2rem] shadow-sm border ${
                   msg.role === 'user' 
-                    ? 'bg-red-50 dark:bg-red-900/5 border-red-100 dark:border-red-900/20 text-gray-800 dark:text-gray-100 rounded-tr-none' 
-                    : 'bg-white dark:bg-[#111111] border-gray-200 dark:border-red-900/10 text-gray-800 dark:text-gray-100 rounded-tl-none'
+                    ? 'bg-primary/5 dark:bg-primary/10 border-primary/10 dark:border-primary/20 text-gray-800 dark:text-gray-100 rounded-tr-none' 
+                    : 'bg-white dark:bg-[#111111] border-gray-200 dark:border-primary/10 text-gray-800 dark:text-gray-100 rounded-tl-none'
                 }`}>
                   <div className="prose dark:prose-invert prose-sm max-w-none font-sans">
                     <Markdown>
@@ -149,13 +149,13 @@ export default function ChatInterview() {
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-gray-100 dark:bg-[#111111] border border-gray-200 dark:border-red-900/10 p-4 rounded-xl rounded-tl-none">
-                <Loader2 className="w-5 h-5 animate-spin text-red-600" />
+              <div className="bg-gray-100 dark:bg-[#111111] border border-gray-200 dark:border-primary/10 p-4 rounded-xl rounded-tl-none">
+                <Loader2 className="w-5 h-5 animate-spin text-primary" />
               </div>
             </div>
           )}
         </div>
-        <div className="p-6 md:p-10 border-t border-gray-200 dark:border-red-900/10 bg-white dark:bg-[#0A0A0A]">
+        <div className="p-6 md:p-10 border-t border-gray-200 dark:border-primary/10 bg-white dark:bg-[#0A0A0A]">
           {!interviewFinished ? (
             <div className="max-w-4xl mx-auto space-y-4">
               <div className="relative flex items-center">
@@ -166,12 +166,12 @@ export default function ChatInterview() {
                   onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Type your answer or ask a question..."
                   disabled={isFinishing}
-                  className="w-full bg-gray-50 dark:bg-[#111111] border border-gray-200 dark:border-red-900/20 rounded-full px-6 md:px-10 py-4 md:py-6 pr-20 md:pr-24 focus:outline-none focus:border-red-600 transition-all text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-600 font-sans"
+                  className="w-full bg-gray-50 dark:bg-[#111111] border border-gray-200 dark:border-primary/20 rounded-full px-6 md:px-10 py-4 md:py-6 pr-20 md:pr-24 focus:outline-none focus:border-primary transition-all text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-600 font-sans"
                 />
                 <button
                   onClick={sendMessage}
                   disabled={isLoading || !input.trim() || isFinishing}
-                  className="absolute right-3 p-3 md:p-4 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white rounded-full transition-all shadow-lg shadow-red-600/20"
+                  className="absolute right-3 p-3 md:p-4 bg-primary hover:bg-primary-hover disabled:opacity-50 text-white rounded-full transition-all shadow-lg shadow-primary/20"
                 >
                   <Send className="w-5 h-5 md:w-6 md:h-6" />
                 </button>
@@ -180,7 +180,7 @@ export default function ChatInterview() {
                 <button
                   onClick={finishInterview}
                   disabled={isLoading || messages.length < 3 || isFinishing}
-                  className="text-sm font-bold text-red-600 hover:text-red-700 uppercase tracking-widest flex items-center gap-2 transition-colors disabled:opacity-50"
+                  className="text-sm font-bold text-primary hover:text-primary-hover uppercase tracking-widest flex items-center gap-2 transition-colors disabled:opacity-50"
                 >
                   {isFinishing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ChevronRight className="w-4 h-4" />}
                   Finish Interview & Get Analysis
@@ -216,7 +216,7 @@ export default function ChatInterview() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-900/10 text-red-600 rounded-full text-[10px] md:text-xs font-bold mb-6 border border-red-100 dark:border-red-900/20 uppercase tracking-widest"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 dark:bg-primary/10 text-primary rounded-full text-[10px] md:text-xs font-bold mb-6 border border-primary/10 dark:border-primary/20 uppercase tracking-widest"
             >
               <Search className="w-3 h-3 md:w-4 md:h-4" />
               Industry Intelligence
@@ -232,11 +232,11 @@ export default function ChatInterview() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
                 onClick={() => handleSelectDomain(domain)}
-                className="p-8 md:p-10 bg-white dark:bg-[#111111] border border-gray-100 dark:border-red-900/10 rounded-3xl md:rounded-[2.5rem] text-left hover:border-red-600/40 hover:shadow-xl dark:hover:shadow-red-900/10 transition-all group flex items-center justify-between shadow-sm"
+                className="p-8 md:p-10 bg-white dark:bg-[#111111] border border-gray-100 dark:border-primary/10 rounded-3xl md:rounded-[2.5rem] text-left hover:border-primary/40 hover:shadow-xl dark:hover:shadow-primary/10 transition-all group flex items-center justify-between shadow-sm"
               >
                 <span className="font-bold text-gray-900 dark:text-gray-100 text-lg md:text-xl font-sans">{domain}</span>
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-gray-50 dark:bg-[#0A0A0A] rounded-xl flex items-center justify-center group-hover:bg-red-600 transition-all">
-                  <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-red-600 group-hover:text-white transition-all" />
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-gray-50 dark:bg-[#0A0A0A] rounded-xl flex items-center justify-center group-hover:bg-primary transition-all">
+                  <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-primary group-hover:text-white transition-all" />
                 </div>
               </motion.button>
             ))}
@@ -248,7 +248,7 @@ export default function ChatInterview() {
             <div className="flex items-center gap-4 md:gap-6">
               <button
                 onClick={() => setSelectedDomain(null)}
-                className="w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-[#111111] border border-gray-200 dark:border-red-900/20 rounded-xl flex items-center justify-center text-red-600 hover:bg-red-600 hover:text-white transition-all shadow-sm"
+                className="w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-[#111111] border border-gray-200 dark:border-primary/20 rounded-xl flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all shadow-sm"
               >
                 <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
               </button>
@@ -259,8 +259,8 @@ export default function ChatInterview() {
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-32 md:py-40 gap-6 md:gap-8">
               <div className="relative">
-                <div className="w-16 h-16 md:w-20 md:h-20 border-4 border-red-600/10 border-t-red-600 rounded-full animate-spin" />
-                <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 md:w-8 md:h-8 text-red-600" />
+                <div className="w-16 h-16 md:w-20 md:h-20 border-4 border-primary/10 border-t-primary rounded-full animate-spin" />
+                <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 md:w-8 md:h-8 text-primary" />
               </div>
               <p className="text-gray-500 dark:text-gray-400 font-sans italic text-base md:text-lg animate-pulse text-center px-4">Synthesizing elite industry trends...</p>
             </div>
@@ -270,8 +270,8 @@ export default function ChatInterview() {
               animate={{ opacity: 1, y: 0 }}
               className="space-y-12 md:space-y-16"
             >
-              <div className="bg-white dark:bg-[#111111] border border-gray-100 dark:border-red-900/10 p-8 md:p-12 rounded-3xl md:rounded-[2rem] shadow-sm relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/5 blur-3xl rounded-full -mr-32 -mt-32" />
+              <div className="bg-white dark:bg-[#111111] border border-gray-100 dark:border-primary/10 p-8 md:p-12 rounded-3xl md:rounded-[2rem] shadow-sm relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-3xl rounded-full -mr-32 -mt-32" />
                 <div className="prose dark:prose-invert max-w-none font-sans relative z-10">
                   <Markdown>{content || ''}</Markdown>
                 </div>
@@ -286,7 +286,7 @@ export default function ChatInterview() {
                 </div>
                 <button
                   onClick={startChat}
-                  className="px-8 md:px-12 py-4 md:py-6 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold text-xl md:text-2xl transition-all flex items-center gap-3 md:gap-4 shadow-xl shadow-red-600/20 group"
+                  className="px-8 md:px-12 py-4 md:py-6 bg-primary hover:bg-primary-hover text-white rounded-full font-bold text-xl md:text-2xl transition-all flex items-center gap-3 md:gap-4 shadow-xl shadow-primary/20 group"
                 >
                   <MessageSquare className="w-6 h-6 md:w-7 md:h-7 group-hover:scale-110 transition-transform" />
                   Initiate Practice Session

@@ -315,7 +315,7 @@ Maintain a professional, encouraging, and helpful female persona throughout.`,
               
               <button
                 onClick={stopSession}
-                className="flex items-center gap-2 mx-auto text-slate-400 hover:text-red-500 transition-colors font-bold text-sm uppercase tracking-widest"
+                className="flex items-center gap-2 mx-auto text-slate-400 hover:text-primary transition-colors font-bold text-sm uppercase tracking-widest"
               >
                 <X className="w-4 h-4" />
                 Abort Session

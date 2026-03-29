@@ -11,6 +11,29 @@ export default function Home({ setMode }: HomeProps) {
   const [user] = useAuthState(auth);
   const firstName = user?.displayName?.split(' ')[0] || 'there';
 
+  const quickStartCards = [
+    {
+      title: 'Voice Interview',
+      subtitle: 'Start a live interview simulation with instant spoken feedback and confidence-building analysis.',
+      cta: 'Begin Now',
+      mode: 'voice' as const,
+      icon: Play,
+      overlay: 'from-primary/20 via-primary/10 to-transparent',
+      pulseDelay: 0,
+      motionDelay: 0,
+    },
+    {
+      title: 'Interview Preparation',
+      subtitle: 'Practice in chat mode, review top domain questions, and improve with guided AI feedback.',
+      cta: 'Open Preparation',
+      mode: 'chat' as const,
+      icon: MessageSquare,
+      overlay: 'from-white/20 via-primary/5 to-transparent dark:from-white/5',
+      pulseDelay: 0.45,
+      motionDelay: 0.12,
+    },
+  ];
+
   const features = [
     { 
       id: '01',
@@ -88,6 +111,71 @@ export default function Home({ setMode }: HomeProps) {
               </div>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Quick Start Options */}
+      <section className="max-w-7xl mx-auto px-8 py-20 relative z-10 bg-mesh">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {quickStartCards.map((card) => (
+            <motion.button
+              key={card.title}
+              initial={{ opacity: 0, y: 36, scale: 0.98 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: card.motionDelay, ease: 'easeOut' }}
+              whileHover={{ y: -8, scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+              onClick={() => setMode(card.mode)}
+              className="group relative overflow-hidden text-left p-10 md:p-12 rounded-[2rem] bg-white/55 dark:bg-white/5 backdrop-blur-xl border border-white/70 dark:border-white/15 shadow-2xl shadow-primary/10 transition-all"
+            >
+              <div className={`absolute inset-0 bg-gradient-to-br ${card.overlay}`} />
+
+              <motion.div
+                aria-hidden
+                animate={{ scale: [1, 1.08, 1], opacity: [0.2, 0.32, 0.2] }}
+                transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut', delay: card.pulseDelay }}
+                className="absolute inset-0 rounded-[2rem] border border-primary/30"
+              />
+
+              <motion.div
+                aria-hidden
+                initial={{ x: '-35%' }}
+                animate={{ x: ['-35%', '145%'] }}
+                transition={{ duration: 6.2, repeat: Infinity, ease: 'easeInOut', repeatDelay: 0.9, delay: card.pulseDelay }}
+                className="absolute top-0 h-full w-24 rotate-12 bg-white/35 dark:bg-white/10 blur-md"
+              />
+
+              <motion.div
+                aria-hidden
+                initial={{ x: '-25%', y: '-20%' }}
+                animate={{ x: ['-25%', '-8%', '-25%'], y: ['-20%', '-6%', '-20%'] }}
+                transition={{ duration: 8.5, repeat: Infinity, ease: 'easeInOut', delay: card.pulseDelay }}
+                className="absolute -top-16 -right-10 h-44 w-44 rounded-full bg-primary/20 blur-2xl"
+              />
+
+              <div className="flex items-center justify-between gap-4 mb-8 relative z-10">
+                <span className="text-primary uppercase tracking-[0.22em] text-[11px] font-bold">Quick Start</span>
+                <motion.div
+                  animate={{ y: [0, -4, 0] }}
+                  transition={{ duration: 2.3, repeat: Infinity, ease: 'easeInOut', delay: card.pulseDelay }}
+                >
+                  <card.icon className="w-7 h-7 text-primary group-hover:scale-110 transition-transform" />
+                </motion.div>
+              </div>
+
+              <h3 className="text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-4 relative z-10">{card.title}</h3>
+              <p className="text-slate-700 dark:text-slate-200 text-base md:text-lg leading-relaxed font-display italic relative z-10">{card.subtitle}</p>
+
+              <motion.div
+                animate={{ x: [0, 4, 0] }}
+                transition={{ duration: 1.9, repeat: Infinity, ease: 'easeInOut', delay: card.pulseDelay }}
+                className="mt-8 inline-flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-xs relative z-10"
+              >
+                {card.cta} <ArrowRight className="w-4 h-4" />
+              </motion.div>
+            </motion.button>
+          ))}
         </div>
       </section>
 

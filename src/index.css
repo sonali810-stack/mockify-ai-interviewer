@@ -6,8 +6,8 @@
   --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-primary: #D31235; /* Bold Red from image */
-  --color-primary-hover: #B00E2B;
+  --color-primary: #0F766E;
+  --color-primary-hover: #0D5F59;
   --color-bg-light: #FFFFFF;
   --color-bg-dark: #121212;
   --color-surface-light: #F8F9FA;
@@ -82,11 +82,11 @@
 }
 
 .bg-mesh {
-  background-image: radial-gradient(at 0% 0%, rgba(211, 18, 53, 0.05) 0px, transparent 50%),
-                    radial-gradient(at 100% 100%, rgba(211, 18, 53, 0.05) 0px, transparent 50%);
+  background-image: radial-gradient(at 0% 0%, rgba(15, 118, 110, 0.07) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(15, 118, 110, 0.07) 0px, transparent 50%);
 }
 
 .dark .bg-mesh {
-  background-image: radial-gradient(at 0% 0%, rgba(211, 18, 53, 0.1) 0px, transparent 50%),
-                    radial-gradient(at 100% 100%, rgba(211, 18, 53, 0.1) 0px, transparent 50%);
+  background-image: radial-gradient(at 0% 0%, rgba(15, 118, 110, 0.14) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(15, 118, 110, 0.14) 0px, transparent 50%);
 }
