@@ -33,7 +33,11 @@ export default function Auth() {
       }
     } catch (err: any) {
       console.error(err);
-      setError(err.message);
+      if (err.code === 'auth/unauthorized-domain') {
+        setError('Google sign-in is blocked for this domain. Add your Netlify domain in Firebase Console -> Authentication -> Settings -> Authorized domains.');
+      } else {
+        setError(err.message || 'Google sign-in failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

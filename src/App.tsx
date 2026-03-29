@@ -17,6 +17,7 @@ type Page = 'home' | 'voice' | 'chat' | 'notes' | 'about';
 export default function App() {
   const [user, loading] = useAuthState(auth);
   const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [authGateTarget, setAuthGateTarget] = useState<Page | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('theme');
@@ -39,6 +40,13 @@ export default function App() {
     window.scrollTo(0, 0);
     setIsMenuOpen(false);
   }, [currentPage]);
+
+  // Continue to the protected page after successful login.
+  useEffect(() => {
+    if (!user || !authGateTarget) return;
+    setCurrentPage(authGateTarget);
+    setAuthGateTarget(null);
+  }, [user, authGateTarget]);
 
   // Firestore connection test
   useEffect(() => {
@@ -65,9 +73,15 @@ export default function App() {
     );
   }
 
-  if (!user) {
-    return <Auth />;
-  }
+  const isProtectedPage = (page: Page) => page === 'voice' || page === 'chat' || page === 'notes';
+
+  const navigateTo = (page: Page) => {
+    if (!user && isProtectedPage(page)) {
+      setAuthGateTarget(page);
+      return;
+    }
+    setCurrentPage(page);
+  };
 
   const navItems = [
     { id: 'home', label: 'Home', icon: HomeIcon },
@@ -77,8 +91,12 @@ export default function App() {
   ];
 
   const renderPage = () => {
+    if (authGateTarget) {
+      return <Auth />;
+    }
+
     switch (currentPage) {
-      case 'home': return <Home setMode={(mode) => setCurrentPage(mode as Page)} />;
+      case 'home': return <Home setMode={(mode) => navigateTo(mode as Page)} />;
       case 'notes': return <Notes />;
       case 'voice': return <VoiceInterview />;
       case 'chat': return <ChatInterview />;
@@ -94,7 +112,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div 
             className="flex items-center gap-3 cursor-pointer group"
-            onClick={() => setCurrentPage('home')}
+            onClick={() => navigateTo('home')}
           >
             <div className="w-10 h-10 bg-primary rounded-none flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
               <Sparkles className="w-6 h-6 text-white" />
@@ -107,7 +125,7 @@ export default function App() {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setCurrentPage(item.id as Page)}
+                onClick={() => navigateTo(item.id as Page)}
                 className={`px-4 py-2 text-xs font-bold transition-all flex items-center gap-2 uppercase tracking-widest ${
                   currentPage === item.id 
                     ? 'text-primary' 
@@ -130,21 +148,33 @@ export default function App() {
             </button>
 
             <div className="hidden sm:flex items-center gap-6">
+              {!user && (
+                <button
+                  onClick={() => setAuthGateTarget('home')}
+                  className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-primary transition-all"
+                >
+                  Login / Sign Up
+                </button>
+              )}
               <button
-                onClick={() => setCurrentPage('notes')}
+                onClick={() => navigateTo('notes')}
                 className={`text-xs font-bold uppercase tracking-widest transition-all ${
                   currentPage === 'notes' ? 'text-primary' : 'text-slate-500 dark:text-slate-400 hover:text-primary'
                 }`}
               >
                 Notes
               </button>
-              <div className="h-4 w-px bg-slate-200 dark:bg-white/10" />
-              <button
-                onClick={() => signOut(auth)}
-                className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-primary transition-all"
-              >
-                Logout
-              </button>
+              {user && (
+                <>
+                  <div className="h-4 w-px bg-slate-200 dark:bg-white/10" />
+                  <button
+                    onClick={() => signOut(auth)}
+                    className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-primary transition-all"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
             </div>
             
             {/* Mobile Menu Toggle */}
@@ -170,7 +200,7 @@ export default function App() {
                 {navItems.map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => setCurrentPage(item.id as Page)}
+                    onClick={() => navigateTo(item.id as Page)}
                     className={`w-full p-4 text-left font-bold flex items-center gap-4 transition-all uppercase text-xs tracking-widest ${
                       currentPage === item.id 
                         ? 'text-primary' 
@@ -181,12 +211,21 @@ export default function App() {
                   </button>
                 ))}
                 <div className="h-px bg-slate-200 dark:bg-white/5 my-4" />
-                <button
-                  onClick={() => signOut(auth)}
-                  className="w-full p-4 text-left font-bold text-xs uppercase tracking-widest text-primary"
-                >
-                  Logout
-                </button>
+                {user ? (
+                  <button
+                    onClick={() => signOut(auth)}
+                    className="w-full p-4 text-left font-bold text-xs uppercase tracking-widest text-primary"
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setAuthGateTarget('home')}
+                    className="w-full p-4 text-left font-bold text-xs uppercase tracking-widest text-primary"
+                  >
+                    Login / Sign Up
+                  </button>
+                )}
               </div>
             </motion.div>
           )}
@@ -230,10 +269,10 @@ export default function App() {
                 <li key={item}>
                   <button 
                     onClick={() => {
-                      if (item === 'Home') setCurrentPage('home');
-                      if (item === 'Notes') setCurrentPage('notes');
-                      if (item === 'Voice Interview') setCurrentPage('voice');
-                      if (item === 'Interview Preparation') setCurrentPage('chat');
+                      if (item === 'Home') navigateTo('home');
+                      if (item === 'Notes') navigateTo('notes');
+                      if (item === 'Voice Interview') navigateTo('voice');
+                      if (item === 'Interview Preparation') navigateTo('chat');
                     }}
                     className="text-slate-400 hover:text-primary transition-colors text-xs font-bold uppercase tracking-widest"
                   >
