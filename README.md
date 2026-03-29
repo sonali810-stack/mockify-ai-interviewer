@@ -2,6 +2,9 @@
 
 Master your interviews with AI — practice smarter, perform better.
 
+## LIVE DEMO
+> **Live Link:** **https://mockifyai.netlify.app/**
+
 ## 🚀 Overview
 MOCKIFY is a comprehensive AI-driven interview preparation platform designed to help job seekers build confidence and hone their skills. It features real-time voice interviews, chat-based practice, and a sophisticated performance analysis engine.
 
